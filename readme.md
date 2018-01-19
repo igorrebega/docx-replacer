@@ -35,7 +35,7 @@ $docx->replaceTextToImage($search, $path);
 ```
 ### License
 
-The Laravel IDE Helper Generator is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+PHP .docx replacer is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
 
 
 [ico-version]: https://img.shields.io/packagist/v/irebega/docx-replacer.svg?style=flat-square

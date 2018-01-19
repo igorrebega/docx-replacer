@@ -1,0 +1,35 @@
+<w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000">
+    <w:rPr/>
+    <w:drawing>
+        <wp:inline distB="114300" distT="114300" distL="114300" distR="114300">
+            <wp:extent cx="5734050" cy="4305300"/>
+            <wp:effectExtent b="0" l="0" r="0" t="0"/>
+            <wp:docPr id="1" name="image2.jpg"/>
+            <a:graphic>
+                <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                    <pic:pic>
+                        <pic:nvPicPr>
+                            <pic:cNvPr id="0" name="image2.jpg"/>
+                            <pic:cNvPicPr preferRelativeResize="0"/>
+                        </pic:nvPicPr>
+                        <pic:blipFill>
+                            <a:blip r:embed="{RID}"/>
+                            <a:srcRect b="0" l="0" r="0" t="0"/>
+                            <a:stretch>
+                                <a:fillRect/>
+                            </a:stretch>
+                        </pic:blipFill>
+                        <pic:spPr>
+                            <a:xfrm>
+                                <a:off x="0" y="0"/>
+                                <a:ext cx="{WIDTH}" cy="{HEIGHT}"/>
+                            </a:xfrm>
+                            <a:prstGeom prst="rect"/>
+                            <a:ln/>
+                        </pic:spPr>
+                    </pic:pic>
+                </a:graphicData>
+            </a:graphic>
+        </wp:inline>
+    </w:drawing>
+</w:r>

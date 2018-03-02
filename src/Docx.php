@@ -15,6 +15,7 @@ class Docx extends \ZipArchive
     const PX_TO_EMU = 8625;
     const REL_LOCATION = 'word/_rels/document.xml.rels';
     const DOCUMENT_BODY_LOCATION = 'word/document.xml';
+    const HEADER_LOCATION = 'word/header1.xml';
     const FOOTER_LOCATION = 'word/footer1.xml';
 
     /**
@@ -43,6 +44,7 @@ class Docx extends \ZipArchive
      */
     public function replaceText($from, $to)
     {
+        $this->replaceTextInLocation($from, $to, self::HEADER_LOCATION);
         $this->replaceTextInLocation($from, $to, self::FOOTER_LOCATION);
         $this->replaceTextInLocation($from, $to, self::DOCUMENT_BODY_LOCATION);
     }

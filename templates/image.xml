@@ -5,9 +5,9 @@
             <wp:extent cx="5734050" cy="4305300"/>
             <wp:effectExtent b="0" l="0" r="0" t="0"/>
             <wp:docPr id="1" name="image2.jpg"/>
-            <a:graphic>
+            <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
                 <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
-                    <pic:pic>
+                    <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
                         <pic:nvPicPr>
                             <pic:cNvPr id="0" name="image2.jpg"/>
                             <pic:cNvPicPr preferRelativeResize="0"/>

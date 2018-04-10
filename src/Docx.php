@@ -15,6 +15,7 @@ class Docx extends \ZipArchive
     const PX_TO_EMU = 8625;
     const REL_LOCATION = 'word/_rels/document.xml.rels';
     const DOCUMENT_BODY_LOCATION = 'word/document.xml';
+    const HEADER_LOCATION = 'word/header1.xml';
     const FOOTER_LOCATION = 'word/footer1.xml';
 
     /**
@@ -43,6 +44,7 @@ class Docx extends \ZipArchive
      */
     public function replaceText($from, $to)
     {
+        $this->replaceTextInLocation($from, $to, self::HEADER_LOCATION);
         $this->replaceTextInLocation($from, $to, self::FOOTER_LOCATION);
         $this->replaceTextInLocation($from, $to, self::DOCUMENT_BODY_LOCATION);
     }
@@ -57,9 +59,10 @@ class Docx extends \ZipArchive
     {
         if (!file_exists($path)) {
             throw new \Exception('Image not exists');
-        };
+        }
         list($width, $height, $type) = getimagesize($path);
-        $name = StringHelper::random(10) . $type;
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $name = StringHelper::random(10) . '.' . $ext;
         $zipPath = 'word/media/' . $name;
         $this->addFromString($zipPath, file_get_contents($path));
 
@@ -109,6 +112,7 @@ class Docx extends \ZipArchive
         $block = file_get_contents(__DIR__ . '/../templates/image.xml');
         $block = str_replace('{RID}', $relId, $block);
         $block = str_replace('{WIDTH}', $width * self::PX_TO_EMU, $block);
+
         return str_replace('{HEIGHT}', $height * self::PX_TO_EMU, $block);
     }
 
@@ -121,7 +125,10 @@ class Docx extends \ZipArchive
     private function replaceTextToBlock($text, $block)
     {
         $file = $this->getFromName(self::DOCUMENT_BODY_LOCATION);
-        $file = (new ReplaceTextBlockToCustom($file))->result($text, $block);
+
+        $pattern = "/<w:r>(?:(?!<w:r>|<\/w:r>).)+" . $text . "(?:(?!<w:r>|<\/w:r>).)+<\/w:r>/s";
+        $file = preg_replace($pattern, $block, $file);
+
         $this->addFromString(self::DOCUMENT_BODY_LOCATION, $file);
         $this->save();
     }

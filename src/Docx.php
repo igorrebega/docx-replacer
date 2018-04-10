@@ -126,7 +126,7 @@ class Docx extends \ZipArchive
     {
         $file = $this->getFromName(self::DOCUMENT_BODY_LOCATION);
 
-        $pattern = "/<w:r>(?:(?!<w:r>|<\/w:r>).)+" . $text . "(?:(?!<w:r>|<\/w:r>).)+<\/w:r>/s";
+        $pattern = "/<w:r(?:(?!<w:r>|<\/w:r>).)+" . preg_quote($text, '/') . "(?:(?!<w:r>|<\/w:r>).)+<\/w:r>/s";
         $file = preg_replace($pattern, $block, $file);
 
         $this->addFromString(self::DOCUMENT_BODY_LOCATION, $file);

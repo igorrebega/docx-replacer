@@ -19,7 +19,7 @@ composer require irebega/docx-replacer
 This code will replace **$search** to **$replace** in **$pathToDocx** file
 
 ```php
-$docx = new IRebega\DocxReplacer($pathToDocx);
+$docx = new IRebega\DocxReplacer\Docx($pathToDocx);
 
 $docx->replaceText($search, $replace);
 ```
@@ -29,7 +29,7 @@ $docx->replaceText($search, $replace);
 This code will replace text **$search** to image that are located in **$path** in **$pathToDocx** file
 
 ```php
-$docx = new IRebega\DocxReplacer($pathToDocx);
+$docx = new IRebega\DocxReplacer\Docx($pathToDocx);
 
 $docx->replaceTextToImage($search, $path);
 ```

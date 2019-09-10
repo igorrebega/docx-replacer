@@ -81,6 +81,9 @@ class Docx extends \ZipArchive
      */
     private function replaceTextInLocation($from, $to, $location)
     {
+        // change made based on: https://github.com/PHPOffice/PHPWord/issues/553
+        $to = preg_replace('~\R~u', '</w:t><w:br/><w:t>', $to);
+
         $message = $this->getFromName($location);
         $message = str_replace($from, $to, $message);
 

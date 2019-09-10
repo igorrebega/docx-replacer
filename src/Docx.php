@@ -41,12 +41,13 @@ class Docx extends \ZipArchive
      * Replace one text to another
      * @param $from
      * @param $to
+     * @param $caseInsensitive
      */
-    public function replaceText($from, $to)
+    public function replaceText($from, $to, $caseInsensitive = false)
     {
-        $this->replaceTextInLocation($from, $to, self::HEADER_LOCATION);
-        $this->replaceTextInLocation($from, $to, self::FOOTER_LOCATION);
-        $this->replaceTextInLocation($from, $to, self::DOCUMENT_BODY_LOCATION);
+        $this->replaceTextInLocation($from, $to, self::HEADER_LOCATION, $caseInsensitive);
+        $this->replaceTextInLocation($from, $to, self::FOOTER_LOCATION, $caseInsensitive);
+        $this->replaceTextInLocation($from, $to, self::DOCUMENT_BODY_LOCATION, $caseInsensitive);
     }
 
     /**
@@ -78,14 +79,18 @@ class Docx extends \ZipArchive
      * @param $from
      * @param $to
      * @param $location
+     * @param $caseInsensitive
      */
-    private function replaceTextInLocation($from, $to, $location)
+    private function replaceTextInLocation($from, $to, $location, $caseInsensitive)
     {
         // change made based on: https://github.com/PHPOffice/PHPWord/issues/553
         $to = preg_replace('~\R~u', '</w:t><w:br/><w:t>', $to);
 
         $message = $this->getFromName($location);
-        $message = str_replace($from, $to, $message);
+        if ($caseInsensitive)
+            $message = str_ireplace($from, $to, $message);
+        else
+            $message = str_replace($from, $to, $message);
 
         $this->addFromString($location, $message);
 

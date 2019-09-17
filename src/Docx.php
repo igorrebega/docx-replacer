@@ -25,40 +25,58 @@ class Docx extends \ZipArchive
 
     /**
      * Docx constructor.
+     *
      * @param string $path path to DOCX file
+     *
      * @throws \Exception
      */
     public function __construct($path)
     {
         $this->path = $path;
 
-        if ($this->open($path, \ZipArchive::CREATE) !== TRUE) {
+        if ($this->open($path, \ZipArchive::CREATE) !== true) {
             throw new DocxException("Unable to open <$path>");
         }
     }
 
     /**
      * Replace one text to another
+     * Case sensitive
+     *
      * @param $from
      * @param $to
-     * @param $caseInsensitive
      */
-    public function replaceText($from, $to, $caseInsensitive = false)
+    public function replaceText($from, $to)
     {
-        $this->replaceTextInLocation($from, $to, self::HEADER_LOCATION, $caseInsensitive);
-        $this->replaceTextInLocation($from, $to, self::FOOTER_LOCATION, $caseInsensitive);
-        $this->replaceTextInLocation($from, $to, self::DOCUMENT_BODY_LOCATION, $caseInsensitive);
+        $this->replaceTextInLocation($from, $to, self::HEADER_LOCATION);
+        $this->replaceTextInLocation($from, $to, self::FOOTER_LOCATION);
+        $this->replaceTextInLocation($from, $to, self::DOCUMENT_BODY_LOCATION);
+    }
+
+    /**
+     * Will replace text with case sensitivity
+     *
+     * @param $from
+     * @param $to
+     */
+    public function replaceTextInsensitive($from, $to)
+    {
+        $this->replaceTextInLocation($from, $to, self::HEADER_LOCATION, true);
+        $this->replaceTextInLocation($from, $to, self::FOOTER_LOCATION, true);
+        $this->replaceTextInLocation($from, $to, self::DOCUMENT_BODY_LOCATION, true);
     }
 
     /**
      * Replace text to given image
+     *
      * @param string $text What text search
      * @param string $path Image to which we want to replace text
+     *
      * @throws \Exception
      */
     public function replaceTextToImage($text, $path)
     {
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             throw new \Exception('Image not exists');
         }
         list($width, $height, $type) = getimagesize($path);
@@ -67,7 +85,8 @@ class Docx extends \ZipArchive
         $zipPath = 'word/media/' . $name;
         $this->addFromString($zipPath, file_get_contents($path));
 
-        $relId = $this->addRel('http://schemas.openxmlformats.org/officeDocument/2006/relationships/image', "media/$name");
+        $relId = $this->addRel('http://schemas.openxmlformats.org/officeDocument/2006/relationships/image',
+            "media/$name");
 
         $block = $this->getImageBlock($relId, $width, $height);
 
@@ -76,27 +95,40 @@ class Docx extends \ZipArchive
 
     /**
      * Replace one text to another in $location
+     *
      * @param $from
      * @param $to
      * @param $location
      * @param $caseInsensitive
      */
-    private function replaceTextInLocation($from, $to, $location, $caseInsensitive)
+    private function replaceTextInLocation($from, $to, $location, $caseInsensitive = false)
     {
-        // change made based on: https://github.com/PHPOffice/PHPWord/issues/553
-        $to = preg_replace('~\R~u', '</w:t><w:br/><w:t>', $to);
+        $to = $this->fixLineBreaksInTo($to);
 
         $message = $this->getFromName($location);
-        if ($caseInsensitive)
+        if ($caseInsensitive) {
             $message = str_ireplace($from, $to, $message);
-        else
+        } else {
             $message = str_replace($from, $to, $message);
+        }
 
         $this->addFromString($location, $message);
 
         $this->save();
     }
 
+    /**
+     * Fix line breaks issue
+     * more details -  https://github.com/PHPOffice/PHPWord/issues/553
+     *
+     * @param string $to
+     *
+     * @return string
+     */
+    private function fixLineBreaksInTo($to)
+    {
+        return preg_replace('~\R~u', '</w:t><w:br/><w:t>', $to);
+    }
 
     /**
      * Save changes to archive
@@ -113,6 +145,7 @@ class Docx extends \ZipArchive
      * @param $relId
      * @param $width
      * @param $height
+     *
      * @return mixed
      */
     private function getImageBlock($relId, $width, $height)
@@ -144,6 +177,7 @@ class Docx extends \ZipArchive
     /**
      * @param $type
      * @param $target
+     *
      * @return string RelId
      */
     private function addRel($type, $target)
@@ -165,6 +199,7 @@ class Docx extends \ZipArchive
 
     /**
      * @param \SimpleXMLElement $xml
+     *
      * @return int
      */
     private function getLastMaxRelId(\SimpleXMLElement $xml)
@@ -177,16 +212,19 @@ class Docx extends \ZipArchive
                 $max = $number;
             }
         }
+
         return $max;
     }
 
     /**
      * @param $relId
+     *
      * @return int
      */
     private function getNumberFromRelId($relId)
     {
         preg_match('!\d+!', $relId, $matches);
-        return (int)$matches[0];
+
+        return (int) $matches[0];
     }
 }

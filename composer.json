@@ -22,6 +22,14 @@
       "IRebega\\DocxReplacer\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "IRebega\\DocxReplacer\\Tests\\": "tests"
+    }
+  },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "require-dev": {
+    "phpunit/phpunit": "^8"
+  }
 }

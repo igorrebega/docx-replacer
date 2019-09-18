@@ -6,7 +6,7 @@
 
 # Extention is no longer supported.
 Docx format has so much unconsistency in their xml files and I just can't predict every case.
-You stil can use extension, but on your own account.
+You still can use extension, but on your own risk.
 
 ### Replace your variables to text or even to images in .docx files
 
